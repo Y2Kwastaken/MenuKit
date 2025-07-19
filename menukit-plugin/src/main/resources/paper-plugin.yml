@@ -1,0 +1,5 @@
+name: MenuKit-Plugin
+version: "1.0.0-SNAPSHOT"
+main: sh.miles.menukit.MenuKitPlugin
+description: A Plugin Wrapper for MenuKit
+api-version: "1.21.8"
