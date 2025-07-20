@@ -2,6 +2,7 @@
 jspecify-version = "1.0.0"
 papermc-version = "1.21.8-R0.1-SNAPSHOT"
 run-paper-version = "2.3.1"
+shadow-version = "9.0.0-rc1"
 
 [libraries]
 jspecify = { group = "org.jspecify", name = "jspecify", version.ref = "jspecify-version" }
@@ -9,3 +10,4 @@ papermc = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper
 
 [plugins]
 run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "run-paper-version" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow-version" }

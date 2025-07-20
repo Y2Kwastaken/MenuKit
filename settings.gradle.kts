@@ -4,4 +4,4 @@ gradle.rootProject {
     version = "1.0.0-SNAPSHOT"
 }
 
-include("menukit-core", "menukit-plugin")
+include("menukit-core", "menukit-plugin", "menukit-strings")

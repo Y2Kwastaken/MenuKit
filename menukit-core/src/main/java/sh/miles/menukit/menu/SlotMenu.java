@@ -24,116 +24,134 @@ import java.util.function.Function;
  */
 public abstract class SlotMenu<V extends InventoryView> {
 
-	protected final Player viewer;
-	protected final PagedInventory inventory;
-	protected final V bukkitView;
+    protected final Player viewer;
+    protected final PagedInventory inventory;
+    protected final V bukkitView;
 
-	protected SlotMenu(final Player player, final Function<Player, V> viewFactory, final int pageCount) {
-		Preconditions.checkArgument(player != null, "A non null player must be provided");
-		Preconditions.checkArgument(viewFactory != null, "A non null view factory must be provided");
-		this.viewer = player;
-		this.bukkitView = viewFactory.apply(player);
-		this.inventory = new PagedInventory(bukkitView.getTopInventory(), pageCount);
-	}
+    protected SlotMenu(final Player player, final Function<Player, V> viewFactory, final int pageCount) {
+        Preconditions.checkArgument(player != null, "A non null player must be provided");
+        Preconditions.checkArgument(viewFactory != null, "A non null view factory must be provided");
+        this.viewer = player;
+        this.bukkitView = viewFactory.apply(player);
+        this.inventory = new PagedInventory(bukkitView.getTopInventory(), pageCount);
+    }
 
-	public final MenuSlot createSlot(Consumer<MenuSlot.Builder> builder) {
-		final MenuSlot.Builder slotBuilder =
-				MenuSlot.builder().inventory(this.inventory).page(0);
-		builder.accept(slotBuilder);
-		return slotBuilder.build();
-	}
+    /**
+     * Creates a slot for this SlotMenu
+     * <p>
+     * Each slot created already has its page value filled to 0 and its inventory set
+     *
+     * @param builder the builder function
+     * @return a new menu slot
+     * @since 1.0.0_SNAPSHOT
+     */
+    public final MenuSlot createSlot(Consumer<MenuSlot.Builder> builder) {
+        final MenuSlot.Builder slotBuilder =
+                MenuSlot.builder().inventory(this.inventory).page(0);
+        builder.accept(slotBuilder);
+        return slotBuilder.build();
+    }
 
-	/**
-	 * Handles the click event for this menu
-	 *
-	 * <p>If this method is overridden and the super method is not called behavior may not occur as
-	 * normally expected. It is recommended to always call the super logic or reimplement it
-	 * accordingly
-	 *
-	 * @param event the click event
-	 * @since 1.0.0-SNAPSHOT
-	 */
-	public void handleClick(final InventoryClickEvent event) {
-		if (event.getClickedInventory() != null
-				&& event.getClickedInventory().equals(this.bukkitView.getTopInventory())) {
-			final int slot = event.getSlot();
-			this.inventory.getSlot(slot).click(new MenuEventCallback<>(event, this));
-		}
-	}
+    /**
+     * Handles the click event for this menu
+     *
+     * <p>If this method is overridden and the super method is not called behavior may not occur as
+     * normally expected. It is recommended to always call the super logic or reimplement it accordingly
+     *
+     * @param event the click event
+     * @since 1.0.0-SNAPSHOT
+     */
+    public void handleClick(final InventoryClickEvent event) {
+        if (event.getClickedInventory() != null
+                && event.getClickedInventory().equals(this.bukkitView.getTopInventory())) {
+            final int slot = event.getSlot();
+            this.inventory.getSlot(slot).click(new MenuEventCallback<>(event, this));
+        }
+    }
 
-	/**
-	 * Handles the drag event for this menu
-	 *
-	 * <p>If this method is overridden and the super method is not called behavior may not occur as
-	 * normally expected. It is recommended to always call the super logic or reimplement it
-	 * accordingly
-	 *
-	 * @param event the drag event
-	 * @since 1.0.0-SNAPSHOT
-	 */
-	public void handleDrag(final InventoryDragEvent event) {
-		if (event.getInventory().equals(this.bukkitView.getTopInventory())) {
-			for (final Integer slot : event.getInventorySlots()) {
-				inventory.getSlot(slot).drag(new MenuEventCallback<>(event, this));
-			}
-		}
-	}
+    /**
+     * Handles the drag event for this menu
+     *
+     * <p>If this method is overridden and the super method is not called behavior may not occur as
+     * normally expected. It is recommended to always call the super logic or reimplement it accordingly
+     *
+     * @param event the drag event
+     * @since 1.0.0-SNAPSHOT
+     */
+    public void handleDrag(final InventoryDragEvent event) {
+        if (event.getInventory().equals(this.bukkitView.getTopInventory())) {
+            for (final Integer slot : event.getInventorySlots()) {
+                inventory.getSlot(slot).drag(new MenuEventCallback<>(event, this));
+            }
+        }
+    }
 
-	/**
-	 * Handles the open event for this menu
-	 *
-	 * <p>This method has no base functionality
-	 *
-	 * @param event the open event
-	 * @since 1.0.0-SNAPSHOT
-	 */
-	public void handleOpen(final InventoryOpenEvent event) {}
+    /**
+     * Handles the open event for this menu
+     *
+     * <p>This method has no base functionality
+     *
+     * @param event the open event
+     * @since 1.0.0-SNAPSHOT
+     */
+    public void handleOpen(final InventoryOpenEvent event) {
+    }
 
-	/**
-	 * Handles the close event for this menu
-	 *
-	 * <p>When overriding this method ensure to call the super method or memory leaks could occur
-	 *
-	 * @param event the close event
-	 * @since 1.0.0-SNAPSHOT
-	 */
-	public void handleClose(final InventoryCloseEvent event) {
-		SlotMenuManager.menuManager().unregister(this.bukkitView.getPlayer().getUniqueId());
-	}
+    /**
+     * Handles the close event for this menu
+     *
+     * <p>When overriding this method ensure to call the super method or memory leaks could occur
+     *
+     * @param event the close event
+     * @since 1.0.0-SNAPSHOT
+     */
+    public void handleClose(final InventoryCloseEvent event) {
+        SlotMenuManager.menuManager().unregister(this.bukkitView.getPlayer().getUniqueId());
+    }
 
-	/**
-	 * Opens the menu for the player and registers it to the menu manager
-	 *
-	 * @throws IllegalStateException thrown if the player already has the menu open
-	 * @since 1.0.0-SNAPSHOT
-	 */
-	public void open() throws IllegalStateException {
-		if (this.bukkitView == viewer.getOpenInventory()) {
-			throw new IllegalStateException("Can not re-open same menu twice");
-		}
+    /**
+     * Opens the menu for the player and registers it to the menu manager
+     *
+     * @throws IllegalStateException thrown if the player already has the menu open
+     * @since 1.0.0-SNAPSHOT
+     */
+    public void open() throws IllegalStateException {
+        if (this.bukkitView == viewer.getOpenInventory()) {
+            throw new IllegalStateException("Can not re-open same menu twice");
+        }
 
-		reload(this.bukkitView);
-		SlotMenuManager.menuManager().register(viewer, this);
-		viewer.openInventory(this.bukkitView);
-	}
+        reload(this.bukkitView);
+        SlotMenuManager.menuManager().register(viewer, this);
+        viewer.openInventory(this.bukkitView);
+    }
 
-	/**
-	 * Gets the bukkit view of this menu
-	 *
-	 * @return the view
-	 * @since 1.0.0-SNAPSHOT
-	 */
-	@Nullable
-	public InventoryView getBukkitView() {
-		return this.bukkitView;
-	}
+    /**
+     * Gets the paged inventory of this menu
+     *
+     * @return the paged inventory
+     * @since 1.0.0-SNAPSHOT
+     */
+    public PagedInventory getInventory() {
+        return inventory;
+    }
 
-	/**
-	 * Function called on first load or any load of this menu.
-	 *
-	 * <p>Reloads should contain all initialization logic
-	 *
-	 * @since 1.0.0-SNAPSHOT
-	 */
-	protected abstract void reload(final V view);
+    /**
+     * Gets the bukkit view of this menu
+     *
+     * @return the view
+     * @since 1.0.0-SNAPSHOT
+     */
+    @Nullable
+    public InventoryView getBukkitView() {
+        return this.bukkitView;
+    }
+
+    /**
+     * Function called on first load or any load of this menu.
+     *
+     * <p>Reloads should contain all initialization logic
+     *
+     * @since 1.0.0-SNAPSHOT
+     */
+    protected abstract void reload(final V view);
 }

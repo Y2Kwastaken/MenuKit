@@ -3,7 +3,6 @@ package sh.miles.menukit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MenuKitPlugin extends JavaPlugin {
-
     @Override
     public void onEnable() {
         MenuKit.INSTANCE.start(this);

@@ -1,7 +1,5 @@
 plugins {
-    java
-    alias(libs.plugins.run.paper)
-    alias(libs.plugins.shadow)
+    `java-library`
 }
 
 repositories {
@@ -13,13 +11,8 @@ dependencies {
     compileOnly(libs.papermc)
 
     implementation(project(":menukit-core"))
-    implementation(project(":menukit-strings"))
 }
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
-}
-
-tasks.runServer {
-    minecraftVersion("1.21.8")
 }
