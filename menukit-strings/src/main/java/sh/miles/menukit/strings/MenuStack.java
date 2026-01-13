@@ -1,6 +1,8 @@
 package sh.miles.menukit.strings;
 
 import com.google.common.base.Preconditions;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
@@ -8,6 +10,12 @@ import sh.miles.menukit.menu.MenuEventCallback;
 import sh.miles.menukit.slot.MenuSlot;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import static sh.miles.menukit.menu.MenuEventCallback.CLICK_CANCEL;
+import static sh.miles.menukit.menu.MenuEventCallback.CLICK_NOTHING;
+import static sh.miles.menukit.menu.MenuEventCallback.DRAG_CANCEL;
+import static sh.miles.menukit.menu.MenuEventCallback.DRAG_NOTHING;
 
 /**
  * Represents an ItemStack with a couple other action properties
@@ -46,7 +54,23 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
      */
     public static MenuStack of(ItemStack item, boolean cancel) {
         Preconditions.checkArgument(item != null, "The provided item must not be null");
-        return new MenuStack(item, cancel ? MenuEventCallback.CLICK_CANCEL : MenuEventCallback.CLICK_NOTHING, cancel ? MenuEventCallback.DRAG_CANCEL : MenuEventCallback.DRAG_NOTHING);
+        return new MenuStack(item, cancel ? CLICK_CANCEL : CLICK_NOTHING, cancel ? DRAG_CANCEL : DRAG_NOTHING);
+    }
+
+    /**
+     * Creates a simple MenuStack that takes in an item and allows the ability to automatically cancel and hide the
+     * tooltip
+     *
+     * @param item    the item to display
+     * @param cancel  true to cancel drag and click events
+     * @param tooltip true to hide the tooltips
+     * @return the created stack
+     */
+    @SuppressWarnings("UnstableApiUsage")
+    public static MenuStack of(ItemStack item, boolean cancel, boolean tooltip) {
+        Preconditions.checkArgument(item != null, "The provided item must not be null");
+        item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hideTooltip(true).build());
+        return new MenuStack(item, cancel ? CLICK_CANCEL : CLICK_NOTHING, cancel ? DRAG_CANCEL : DRAG_NOTHING);
     }
 
     public static Builder builder() {
@@ -60,8 +84,8 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
      */
     public static class Builder {
         private ItemStack content = ItemStack.empty();
-        private Consumer<MenuEventCallback<InventoryClickEvent>> click = MenuEventCallback.CLICK_NOTHING;
-        private Consumer<MenuEventCallback<InventoryDragEvent>> drag = MenuEventCallback.DRAG_NOTHING;
+        private Consumer<MenuEventCallback<InventoryClickEvent>> click = CLICK_NOTHING;
+        private Consumer<MenuEventCallback<InventoryDragEvent>> drag = DRAG_NOTHING;
 
         private Builder() {
         }
@@ -102,6 +126,16 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
         public Builder content(final ItemStack itemStack) {
             Preconditions.checkArgument(itemStack != null, "The provided item must not be null");
             this.content = itemStack;
+            return this;
+        }
+
+        /**
+         * Sets the content of this slot
+         * @param stackFunc the stack creating function
+         * @since 1.2.0-SNAPSHOT
+         */
+        public Builder content(final Supplier<ItemStack> stackFunc) {
+            this.content = stackFunc.get();
             return this;
         }
 

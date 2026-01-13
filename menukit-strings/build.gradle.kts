@@ -3,7 +3,7 @@ plugins {
     `maven-publish`
 }
 
-version = rootProject.version
+version = "1.2.0-SNAPSHOT"
 
 repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
