@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/menukit-core" />
             <option value="$PROJECT_DIR$/menukit-plugin" />
+            <option value="$PROJECT_DIR$/menukit-strings" />
           </set>
         </option>
       </GradleProjectSettings>

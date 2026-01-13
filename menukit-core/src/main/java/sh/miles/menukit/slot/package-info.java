@@ -1,5 +1,5 @@
 /**
- * Package containing slot implements for {@link io.redlight.aio.paper.menu.SlotMenu}
+ * Package containing slot implements for {@link sh.miles.menukit.menu.SlotMenu}
  *
  * @since 0
  */

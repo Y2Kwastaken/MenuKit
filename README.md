@@ -9,7 +9,7 @@ maven {
 }
 
 
-implementation("sh.miles.menukit:menukit-core:unspecified")
+implementation("sh.miles.menukit:menukit-core:1.0.0-SNAPSHOT")
 ```
 
 ## Example Usage
