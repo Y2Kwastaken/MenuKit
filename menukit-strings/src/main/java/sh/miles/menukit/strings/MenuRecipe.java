@@ -75,9 +75,8 @@ public final class MenuRecipe {
         }
 
         public Builder page(int page, String layout) {
-            Preconditions.checkState(pageSize == -999 || layout.length() == (pageSize + 2), "The given layout must match the standardized page size");
             this.pages.put(page, layout);
-            this.pageSize = layout.length() - 2;
+            this.pageSize = layout.replaceAll("\n", "").length();
             return this;
         }
 
