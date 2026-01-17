@@ -11,7 +11,7 @@ MenuKit is available via the Miles Repository.
 <repository>
     <id>miles-repos-snapshots</id>
     <name>Miles Repositories</name>
-    <url>[https://maven.miles.sh/snapshots](https://maven.miles.sh/snapshots)</url>
+    <url>https://maven.miles.sh/snapshots</url>
 </repository>
 
 <dependency>
@@ -31,7 +31,7 @@ MenuKit is available via the Miles Repository.
 repositories {
     maven {
         name "milesReposSnapshots"
-        url "[https://maven.miles.sh/snapshots](https://maven.miles.sh/snapshots)"
+        url "https://maven.miles.sh/snapshots"
     }
 }
 
