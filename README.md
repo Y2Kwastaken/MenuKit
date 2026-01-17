@@ -1,113 +1,192 @@
 # MenuKit
 
-Using MenuKit core is very easy just shade and relocate
+MenuKit is a modular, efficient, and declarative inventory GUI library for PaperMC/Spigot. It abstracts the boilerplate of inventory management, offering a robust event handling system and a string-based layout engine for intuitive menu design.
 
-```gradle
-maven {
-    name = "milesReposSnapshots"
-    url = uri("https://maven.miles.sh/snapshots")
-}
+## Installation
 
+MenuKit is available via the Miles Repository.
 
-implementation("sh.miles.menukit:menukit-core:1.0.0-SNAPSHOT")
+### Maven
+```xml
+<repository>
+    <id>miles-repos-snapshots</id>
+    <name>Miles Repositories</name>
+    <url>[https://maven.miles.sh/snapshots](https://maven.miles.sh/snapshots)</url>
+</repository>
+
+<dependency>
+    <groupId>sh.miles.menukit</groupId>
+    <artifactId>menukit-core</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+</dependency>
+<dependency>
+    <groupId>sh.miles.menukit</groupId>
+    <artifactId>menukit-strings</artifactId>
+    <version>1.3.0-SNAPSHOT</version>
+</dependency>
 ```
 
-## Example Usage
+### Gradle
+```groovy
+repositories {
+    maven {
+        name "milesReposSnapshots"
+        url "[https://maven.miles.sh/snapshots](https://maven.miles.sh/snapshots)"
+    }
+}
+
+dependencies {
+    implementation "sh.miles.menukit:menukit-core:1.0.0-SNAPSHOT"
+    implementation "sh.miles.menukit:menukit-strings:1.3.0-SNAPSHOT"
+}
+```
+
+---
+
+## Modules
+
+* **`menukit-core`**: The backbone of the library. Handles `SlotMenu` abstraction, `PagedInventory` management, and functional `MenuEventCallback` systems.
+* **`menukit-strings`**: A layout engine allowing menus to be defined via visual text patterns (Strings) rather than raw slot indices.
+
+---
+
+## Usage
+
+### 1. The Declarative Approach (MenuRecipes)
+Instead of calculating slot integers, MenuKit allows you to "draw" your inventory using characters. This is done via `menukit-strings`.
 
 ```java
-import io.papermc.paper.registry.keys.SoundEventKeys;
-import io.redlight.aio.paper.menu.MenuEventCallback;
-import io.redlight.aio.paper.menu.SlotMenu;
-import io.redlight.aio.paper.menu.SlotMenuFactory;
-import net.kyori.adventure.sound.Sound;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.InventoryView;
-import org.bukkit.inventory.ItemType;
-import org.bukkit.inventory.MenuType;
-import org.jspecify.annotations.Nullable;
+public class MyCustomMenu extends SlotMenu<InventoryView> {
 
-import java.util.function.Function;
+    // 1. Define the Visual Layout
+    private static final MenuRecipe RECIPE = MenuRecipe.builder()
+            .page(0, """
+                    BBBBBBBBB
+                    B  X I  B
+                    BBBBBBBBB""")
+            // 2. Map Characters to Items (MenuStacks)
+            .map('B', MenuStack.of(ItemType.BLACK_STAINED_GLASS_PANE, true, true)) // Border
+            .map('I', MenuStack.builder()
+                    .content(ItemType.DIAMOND)
+                    .click(e -> {
+                        e.cancel();
+                        e.getPlayer().sendMessage("You clicked the Diamond!");
+                    })
+                    .drag(MenuEventCallback.DRAG_CANCEL)
+                    .build())
+            .map('X', MenuStack.of(ItemType.BARRIER, true)) // Non-clickable barrier
+            .build();
 
-public class TestMenu extends SlotMenu<InventoryView> {
+    public MyCustomMenu(Player player) {
+        // Initialize parent with a standard Chest View (9x3)
+        super(player, (p) -> MenuType.GENERIC_9X3.create(p, Component.text("My Menu")), 1);
+    }
 
-	@Nullable
-	private static SlotMenuFactory<InventoryView> factory = null;
-
-	protected TestMenu(final Player player, final Function<Player, InventoryView> viewFactory, final int pageCount) {
-		super(player, viewFactory, pageCount);
-	}
-
-	@Override
-	protected void reload(final InventoryView view) {
-		inventory.setItem(super.createSlot((builder) -> builder
-			.index(0)
-			.page(0)
-			.content(ItemType.ARROW.createItemStack())
-			.drag(MenuEventCallback.DRAG_CANCEL)
-			.click(callback -> {
-				callback.getEvent().setCancelled(true);
-				final var player = callback.getPlayer();
-				if (inventory.getCurrentPage(9) >= inventory.getPages() - 1) {
-					player.playSound(Sound.sound(SoundEventKeys.BLOCK_REDSTONE_TORCH_BURNOUT.key(), Sound.Source.UI, 1.0f, 1.0f));
-					return;
-				}
-
-				inventory.setCurrentPageFor(inventory.getCurrentPage(9) + 1, 9);
-				player.playSound(Sound.sound(SoundEventKeys.ITEM_BOOK_PAGE_TURN.key(), Sound.Source.UI, 1.0f, 1.0f));
-
-			})
-			.build()));
-		initContents();
-		inventory.setItem(super.createSlot(builder -> builder
-			.index(18)
-			.page(0)
-			.content(ItemType.ARROW.createItemStack())
-			.drag(MenuEventCallback.DRAG_CANCEL)
-			.click(callback -> {
-				callback.getEvent().setCancelled(true);
-				final var player = callback.getPlayer();
-				if (inventory.getCurrentPage(9) <= 0) {
-					player.playSound(Sound.sound(SoundEventKeys.BLOCK_REDSTONE_TORCH_BURNOUT.key(), Sound.Source.UI, 1.0f, 1.0f));
-					return;
-				}
-
-				inventory.setCurrentPageFor(inventory.getCurrentPage(9) - 1, 9);
-				player.playSound(Sound.sound(SoundEventKeys.ITEM_BOOK_PAGE_TURN.key(), Sound.Source.UI, 1.0f, 1.0f));
-			})
-		));
-	}
-
-	private void initContents() {
-		inventory.setItem(super.createSlot(builder -> builder
-			.index(9)
-			.page(0)
-			.content(ItemType.STONE.createItemStack(1))
-			.drag(MenuEventCallback.DRAG_CANCEL)
-			.click(MenuEventCallback.CLICK_CANCEL)
-		));
-		inventory.setItem(super.createSlot(builder -> builder
-			.index(9)
-			.page(1)
-			.content(ItemType.STONE.createItemStack(2))
-			.drag(MenuEventCallback.DRAG_CANCEL)
-			.click(MenuEventCallback.CLICK_CANCEL)
-		));
-		inventory.setItem(super.createSlot(builder -> builder
-			.index(9)
-			.page(2)
-			.content(ItemType.STONE.createItemStack(3))
-			.drag(MenuEventCallback.DRAG_CANCEL)
-			.click(MenuEventCallback.CLICK_CANCEL)
-		));
-	}
-
-	public static SlotMenuFactory<InventoryView> factory() {
-		if (factory == null) {
-			factory = new SlotMenuFactory<>(MenuType.GENERIC_9X3::create, 3);
-			factory.setMenuConstructor(TestMenu::new);
-		}
-		return factory;
-	}
+    @Override
+    protected void reload(InventoryView view) {
+        // 3. Apply the recipe to the inventory
+        RECIPE.apply(this.getInventory());
+    }
 }
-
 ```
+
+### 2. The Manual Approach (Extending SlotMenu)
+If you prefer not to use String recipes or need to calculate slot positions programmatically (e.g., mathematical patterns), you can extend `SlotMenu` and use the `createSlot` helper.
+
+```java
+public class CounterMenu extends SlotMenu<InventoryView> {
+
+    private int counter = 0;
+
+    public CounterMenu(Player player) {
+        super(player, (p) -> MenuType.GENERIC_9X1.create(p, Component.text("Counter Menu")), 1);
+    }
+
+    @Override
+    protected void reload(InventoryView view) {
+        // Clear the inventory or set a background if needed
+        // this.inventory is your PagedInventory instance
+
+        // Example: specific slot placement using the createSlot helper
+        // This helper automatically links the slot to the current inventory and page 0
+        MenuSlot counterButton = createSlot((builder) -> builder
+                .index(4) // Center slot
+                .content(ItemType.REDSTONE_BLOCK, (stack) -> {
+                    stack.setData(DataComponentTypes.ITEM_NAME, Component.text("Clicks: " + counter));
+                })
+                .click((e) -> {
+                    e.cancel();
+                    this.counter++;
+                    // Recursively call open() to refresh the view with new data
+                    final var cur = inventory.getSlot(4).getContent();
+                    cur.setData(DataComponentTypes.ITEM_NAME, Component.text("Clicks: " + counter));
+                    inventory.getSlot(4).setContent(cur);
+                })
+                .drag(MenuEventCallback.DRAG_CANCEL)
+        );
+
+        this.inventory.setItem(counterButton);
+    }
+}
+```
+
+### 3. Functional Event Handling
+MenuKit moves away from massive `InventoryClickEvent` listeners in favor of functional callbacks attached directly to the Item/Slot.
+
+You can use the `MenuStack` builder to attach logic:
+
+```java
+MenuStack.builder()
+    .content(ItemType.EMERALD_BLOCK)
+    .click((callback) -> {
+        // Automatic casting and helper methods available
+        callback.cancel(); 
+        
+        Player p = callback.getPlayer();
+        p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 1f);
+        
+        // Access the specific menu instance if needed
+        if (callback.getMenu() instanceof MyCustomMenu myMenu) {
+            // specific logic
+        }
+    })
+    .drag(MenuEventCallback.DRAG_CANCEL) // Pre-defined constants for common actions
+    .build();
+```
+
+### 4. Simple Factory Menus
+For simple, static menus where creating a new class file is overkill, use the `SlotMenuFactory`:
+
+```java
+SlotMenuFactory<InventoryView> factory = new SlotMenuFactory<>(
+    (p) -> MenuType.GENERIC_9X1.create(p, Component.text("Quick Menu")), 
+    1
+);
+
+factory.create(player, (view, inventory) -> {
+    // Direct access to the PagedInventory to set slots
+    inventory.setItem(MenuSlot.builder()
+        .inventory(inventory)
+        .page(0)
+        .index(4)
+        .content(ItemType.APPLE.createItemStack())
+        .disableInteractions()
+        .build());
+}).open();
+```
+
+---
+
+## Architecture Overview
+
+### `SlotMenu` & `PagedInventory`
+Every menu is backed by a `PagedInventory`. This wrapper allows you to manage items across multiple virtual pages, even if the frontend GUI only shows one page at a time.
+
+### `MenuSlot`
+A `MenuSlot` represents a single position in the GUI. It holds:
+* The `ItemStack` content.
+* A `Consumer` for Click events.
+* A `Consumer` for Drag events.
+
+### `MenuRecipe`
+Found in the `strings` module, this class parses a string grid (e.g., 9x3 characters) and maps them to `MenuStack` definitions. This ensures your code structure visually matches the resulting GUI structure.
