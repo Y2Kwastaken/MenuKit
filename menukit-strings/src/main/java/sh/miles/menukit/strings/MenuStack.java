@@ -6,6 +6,7 @@ import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import sh.miles.menukit.menu.MenuEventCallback;
 import sh.miles.menukit.slot.MenuSlot;
 
@@ -51,10 +52,10 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
      * @param item   the item to display
      * @param cancel true to cancel drag and click events
      * @return the created stack
+     * @since 1.0.0-SNAPSHOT
      */
     public static MenuStack of(ItemStack item, boolean cancel) {
-        Preconditions.checkArgument(item != null, "The provided item must not be null");
-        return new MenuStack(item, cancel ? CLICK_CANCEL : CLICK_NOTHING, cancel ? DRAG_CANCEL : DRAG_NOTHING);
+        return of(item, cancel, false);
     }
 
     /**
@@ -65,12 +66,29 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
      * @param cancel  true to cancel drag and click events
      * @param tooltip true to hide the tooltips
      * @return the created stack
+     * @since 1.2.0-SNAPSHOT
      */
     @SuppressWarnings("UnstableApiUsage")
     public static MenuStack of(ItemStack item, boolean cancel, boolean tooltip) {
         Preconditions.checkArgument(item != null, "The provided item must not be null");
-        item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hideTooltip(true).build());
+        if (tooltip) {
+            item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hideTooltip(true).build());
+        }
         return new MenuStack(item, cancel ? CLICK_CANCEL : CLICK_NOTHING, cancel ? DRAG_CANCEL : DRAG_NOTHING);
+    }
+
+    /**
+     * Creates a simple MenuStack that takes in an item type and allows the ability to automatically cancel its events
+     * and hide the tooltip
+     *
+     * @param type    the type
+     * @param cancel  true to cancel drag and click events
+     * @param tooltip true to hide tooltips
+     * @return the created stack
+     * @since 1.3.0-SNAPSHOT
+     */
+    public static MenuStack of(ItemType type, boolean cancel, boolean tooltip) {
+        return of(type.createItemStack(), cancel, tooltip);
     }
 
     public static Builder builder() {
@@ -131,11 +149,44 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
 
         /**
          * Sets the content of this slot
+         *
+         * @param type the type to set as the content
+         * @return this builder
+         * @since 1.3.0-SNAPSHOT
+         */
+        public Builder content(final ItemType type) {
+            Preconditions.checkArgument(type != null, "The provided item type must not be null");
+            this.content = type.createItemStack();
+            return this;
+        }
+
+        /**
+         * Sets the content of this slot
+         *
          * @param stackFunc the stack creating function
          * @since 1.2.0-SNAPSHOT
+         * @deprecated see {@link #content(ItemType, Consumer)}
          */
+        @Deprecated(forRemoval = true)
         public Builder content(final Supplier<ItemStack> stackFunc) {
+            Preconditions.checkArgument(stackFunc != null, "the provided stack function must not be null");
             this.content = stackFunc.get();
+            return this;
+        }
+
+        /**
+         * Sets the content of this slot
+         *
+         * @param type   the type of the item to set
+         * @param modify any pre modifications
+         * @return this builder
+         * @since 1.3.0-SNAPSHOT
+         */
+        public Builder content(final ItemType type, final Consumer<ItemStack> modify) {
+            Preconditions.checkArgument(type != null, "The provided type must not be null");
+            Preconditions.checkArgument(modify != null, "Modification function must not be null");
+            this.content = type.createItemStack();
+            modify.accept(this.content);
             return this;
         }
 
