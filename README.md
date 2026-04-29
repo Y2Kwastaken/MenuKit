@@ -2,6 +2,8 @@
 
 MenuKit is a modular, efficient, and declarative inventory GUI library for PaperMC/Spigot. It abstracts the boilerplate of inventory management, offering a robust event handling system and a string-based layout engine for intuitive menu design.
 
+See more extensive documentation on my docs page https://miles.sh/docs/menu_kit/
+
 ## Installation
 
 MenuKit is available via the Miles Repository.
