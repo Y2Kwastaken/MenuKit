@@ -7,7 +7,7 @@ import org.bukkit.plugin.Plugin;
 import sh.miles.menukit.impl.SlotMenuManager;
 
 /**
- * Main Access Point for MenuKit
+ * Main Access Point for MenuKit.
  *
  * @since 1.0.0-SNAPSHOT
  */
@@ -19,7 +19,7 @@ public final class MenuKit {
     private Listener listener;
 
     /**
-     * Starts MenuKit exclusively for a single plugin
+     * Starts MenuKit exclusively for a single plugin.
      *
      * @param plugin the plugin to start MenuKit for
      * @throws IllegalArgumentException if a plugin has already started this instance of MenuKit
@@ -32,7 +32,7 @@ public final class MenuKit {
     }
 
     /**
-     * Stops MenuKit for the starting plugin
+     * Stops MenuKit for the starting plugin.
      *
      * @throws IllegalArgumentException thrown if MenuKit was never started
      * @since 1.0.0-SNAPSHOT

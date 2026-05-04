@@ -1,7 +1,7 @@
 /**
  * Package containing classes and interfaces related to item gui menus
  *
- * @since 0
+ * @since 1.0.0-SNAPSHOT
  */
 @NullMarked
 package sh.miles.menukit.menu;

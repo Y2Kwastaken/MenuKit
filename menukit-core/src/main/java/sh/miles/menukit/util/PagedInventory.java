@@ -5,7 +5,9 @@ import org.bukkit.inventory.Inventory;
 import sh.miles.menukit.slot.MenuSlot;
 
 /**
- * A Paged Inventory Wrapper
+ * A wrapper around a single {@link Inventory} and a {@link PagedArray} instance to simulate the idea of a "PagedArray".
+ * This class utilizes the extra bundled data of {@link MenuSlot} to bundle components together and assignt hem to their
+ * proper pages.
  *
  * @since 1.0.0-SNAPSHOT
  */
@@ -15,7 +17,7 @@ public final class PagedInventory {
     private final PagedArray<MenuSlot> pagedArray;
 
     /**
-     * Creates a new instance of PagedInventory
+     * Creates a new instance of PagedInventory.
      *
      * @param inventory the inventory to use
      * @param pages     the amount of pages this PagedInventory will have
@@ -27,7 +29,7 @@ public final class PagedInventory {
     }
 
     /**
-     * Sets an item on a specific page
+     * Sets an item on a specific page.
      *
      * @param item the item to put
      * @throws IllegalArgumentException thrown if the item is null
@@ -44,7 +46,7 @@ public final class PagedInventory {
     }
 
     /**
-     * Gets the slot at the given index
+     * Gets the slot at the given index.
      *
      * @param slot the slot
      * @return the slot at that position
@@ -56,7 +58,7 @@ public final class PagedInventory {
     }
 
     /**
-     * Gets the slot on the provided page at the given index
+     * Gets the slot on the provided page at the given index.
      *
      * @param slot the slot
      * @param page the page
@@ -69,7 +71,7 @@ public final class PagedInventory {
     }
 
     /**
-     * Gets the current page for the given slot
+     * Gets the current page for the given slot.
      *
      * @param slot the slot
      * @return the page that slot is on
@@ -80,7 +82,7 @@ public final class PagedInventory {
     }
 
     /**
-     * Sets the current page for all items in the paged array
+     * Sets the current page for all items in the paged array.
      *
      * @param page the page to swap to
      * @since 1.0.0-SNAPSHOT
@@ -93,7 +95,7 @@ public final class PagedInventory {
     }
 
     /**
-     * Sets the current page for a specific slot
+     * Sets the current page for a specific slot.
      *
      * @param slot the slot
      * @param page the page to set that slot to
@@ -105,7 +107,7 @@ public final class PagedInventory {
     }
 
     /**
-     * Sets the current page for an array of slots
+     * Sets the current page for an array of slots.
      *
      * @param page  the page to set the slots to
      * @param slots the slots to set
@@ -118,7 +120,7 @@ public final class PagedInventory {
     }
 
     /**
-     * Updates the MenuSlot contents in the backing inventory
+     * Updates the MenuSlot contents in the backing inventory.
      *
      * @param slot the slot to update
      * @since 1.0.0-SNAPSHOT
@@ -132,7 +134,7 @@ public final class PagedInventory {
     }
 
     /**
-     * Gets the number of pages this PagedInventory has
+     * Gets the number of pages this PagedInventory has.
      *
      * @return the page count
      * @since 1.0.0-SNAPSHOT
@@ -142,7 +144,7 @@ public final class PagedInventory {
     }
 
     /**
-     * Gets the size of each page
+     * Gets the size of each page.
      *
      * @return the page size
      * @since 1.0.0-SNAPSHOT

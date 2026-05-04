@@ -1,7 +1,7 @@
 /**
  * Contains classes related to strings processing abilities for MenuKit
  *
- * @since 1.0.0
+ * @since 1.0.0-SNAPSHOT
  */
 @NullMarked
 package sh.miles.menukit.strings;

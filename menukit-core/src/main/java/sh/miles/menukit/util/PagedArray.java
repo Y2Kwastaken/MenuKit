@@ -42,7 +42,7 @@ public final class PagedArray<T> {
     /**
      * Gets the content from the index provided on the selected page for that index.
      * <p>
-     * The page can be changed using {@link #setCurrentPageFor(int, int)} or {@link #setCurrentPage(int)}
+     * The page can be changed using {@link #setCurrentPageFor(int, int)} or {@link #setCurrentPage(int)}.
      *
      * @param index the index
      * @throws IllegalStateException if the input is out of bounds
@@ -55,7 +55,7 @@ public final class PagedArray<T> {
     }
 
     /**
-     * Gets the content from the index provided on the provided page
+     * Gets the content from the index provided on the provided page.
      *
      * @param index the index to get the object from
      * @param page  the page to get the object from
@@ -90,7 +90,7 @@ public final class PagedArray<T> {
     }
 
     /**
-     * Sets the value at a specific index on the provided page
+     * Sets the value at a specific index on the provided page.
      *
      * @param page  the page to set the object on
      * @param index the index on the given page to set
@@ -107,7 +107,7 @@ public final class PagedArray<T> {
     }
 
     /**
-     * Sets the current page for the provided index
+     * Sets the current page for the provided index.
      *
      * @param index the index to set
      * @param page  the page to flip to
@@ -121,7 +121,7 @@ public final class PagedArray<T> {
     }
 
     /**
-     * Sets all indexes to the current page
+     * Sets all indexes to the current page.
      *
      * @param page the page to flip to
      * @throws IllegalStateException thrown if the page input is out of bounds
@@ -135,7 +135,7 @@ public final class PagedArray<T> {
     }
 
     /**
-     * Gets the page that the given index is on
+     * Gets the page that the given index is on.
      *
      * @param index the index
      * @return the page that index is on, 0 for first page.
@@ -148,7 +148,7 @@ public final class PagedArray<T> {
     }
 
     /**
-     * Gets the number of pages
+     * Gets the number of pages.
      *
      * @return the number of pages
      * @since 1.0.0-SNAPSHOT
@@ -158,7 +158,7 @@ public final class PagedArray<T> {
     }
 
     /**
-     * Gets the page size
+     * Gets the page size.
      *
      * @return the page size
      * @since 1.0.0-SNAPSHOT

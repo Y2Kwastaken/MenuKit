@@ -26,13 +26,25 @@ import static sh.miles.menukit.menu.MenuEventCallback.DRAG_NOTHING;
 public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClickEvent>> click,
                         Consumer<MenuEventCallback<InventoryDragEvent>> drag) {
 
+    /**
+     * Gets a cloned ItemStack of this MenuStack.
+     *
+     * @return a bukkit ItemStack
+     * @since 1.0.0-SNAPSHOT
+     */
     @Override
     public ItemStack item() {
         return item.clone();
     }
 
+    /**
+     * Creates a MenuSlot.Builder from this MenuStack.
+     *
+     * @return a newly created MenuSlot Builder
+     * @since 1.0.0-SNAPSHOT
+     */
     public MenuSlot.Builder transfer() {
-        return MenuSlot.builder().content(this.item).drag(this.drag).click(this.click);
+        return MenuSlot.builder().content(this.item.clone()).drag(this.drag).click(this.click);
     }
 
     /**
@@ -47,7 +59,7 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
     }
 
     /**
-     * Creates a simple MenuStack that takes in an item and allows for events to be automatically cancelled or not act
+     * Creates a simple MenuStack that takes in an item and allows for events to be automatically cancelled or not act.
      *
      * @param item   the item to display
      * @param cancel true to cancel drag and click events
@@ -60,7 +72,7 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
 
     /**
      * Creates a simple MenuStack that takes in an item and allows the ability to automatically cancel and hide the
-     * tooltip
+     * tooltip.
      *
      * @param item    the item to display
      * @param cancel  true to cancel drag and click events
@@ -79,7 +91,7 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
 
     /**
      * Creates a simple MenuStack that takes in an item type and allows the ability to automatically cancel its events
-     * and hide the tooltip
+     * and hide the tooltip.
      *
      * @param type    the type
      * @param cancel  true to cancel drag and click events
@@ -91,12 +103,18 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
         return of(type.createItemStack(), cancel, tooltip);
     }
 
+    /**
+     * Creates a new MenuStack builder.
+     *
+     * @return a newly created builder
+     * @since 1.0.0-SNAPSHOT
+     */
     public static Builder builder() {
         return new Builder();
     }
 
     /**
-     * Builder for MenuStack
+     * Builder for MenuStack.
      *
      * @since 1.0.0-SNAPSHOT
      */
@@ -135,7 +153,7 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
         }
 
         /**
-         * Sets the content of this slot
+         * Sets the content of this slot.
          *
          * @param itemStack the item content
          * @return this builder
@@ -148,7 +166,7 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
         }
 
         /**
-         * Sets the content of this slot
+         * Sets the content of this slot.
          *
          * @param type the type to set as the content
          * @return this builder
@@ -161,7 +179,7 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
         }
 
         /**
-         * Sets the content of this slot
+         * Sets the content of this slot.
          *
          * @param stackFunc the stack creating function
          * @since 1.2.0-SNAPSHOT
@@ -175,7 +193,7 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
         }
 
         /**
-         * Sets the content of this slot
+         * Sets the content of this slot.
          *
          * @param type   the type of the item to set
          * @param modify any pre modifications
@@ -191,7 +209,7 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
         }
 
         /**
-         * Builds this MenuStack builder
+         * Builds this MenuStack builder.
          *
          * @return the MenuStack
          * @since 1.0.0-SNAPSHOT

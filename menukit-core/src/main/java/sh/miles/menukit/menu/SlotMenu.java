@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * A Menu constructed with an array of {@link MenuSlot}'s
+ * A Menu constructed with an array of {@link MenuSlot}'s.
  *
  * <p>This class is intended to be extended purely
  *
@@ -37,7 +37,7 @@ public abstract class SlotMenu<V extends InventoryView> {
     }
 
     /**
-     * Creates a slot for this SlotMenu
+     * Creates a slot for this SlotMenu.
      * <p>
      * Each slot created already has its page value filled to 0 and its inventory set
      *
@@ -53,7 +53,7 @@ public abstract class SlotMenu<V extends InventoryView> {
     }
 
     /**
-     * Handles the click event for this menu
+     * Handles the click event for this menu.
      *
      * <p>If this method is overridden and the super method is not called behavior may not occur as
      * normally expected. It is recommended to always call the super logic or reimplement it accordingly
@@ -70,7 +70,7 @@ public abstract class SlotMenu<V extends InventoryView> {
     }
 
     /**
-     * Handles the drag event for this menu
+     * Handles the drag event for this menu.
      *
      * <p>If this method is overridden and the super method is not called behavior may not occur as
      * normally expected. It is recommended to always call the super logic or reimplement it accordingly
@@ -87,7 +87,7 @@ public abstract class SlotMenu<V extends InventoryView> {
     }
 
     /**
-     * Handles the open event for this menu
+     * Handles the open event for this menu.
      *
      * <p>This method has no base functionality
      *
@@ -98,9 +98,9 @@ public abstract class SlotMenu<V extends InventoryView> {
     }
 
     /**
-     * Handles the close event for this menu
+     * Handles the close event for this menu.
      *
-     * <p>When overriding this method ensure to call the super method or memory leaks could occur
+     * <p>When overriding this method ensure to call the super method or memory leaks will occur
      *
      * @param event the close event
      * @since 1.0.0-SNAPSHOT
@@ -110,7 +110,7 @@ public abstract class SlotMenu<V extends InventoryView> {
     }
 
     /**
-     * Opens the menu for the player and registers it to the menu manager
+     * Opens the menu for the player and registers it to the menu manager.
      *
      * @throws IllegalStateException thrown if the player already has the menu open
      * @since 1.0.0-SNAPSHOT
@@ -126,7 +126,7 @@ public abstract class SlotMenu<V extends InventoryView> {
     }
 
     /**
-     * Gets the paged inventory of this menu
+     * Gets the paged inventory of this menu.
      *
      * @return the paged inventory
      * @since 1.0.0-SNAPSHOT
@@ -136,7 +136,7 @@ public abstract class SlotMenu<V extends InventoryView> {
     }
 
     /**
-     * Gets the bukkit view of this menu
+     * Gets the bukkit view of this menu.
      *
      * @return the view
      * @since 1.0.0-SNAPSHOT

@@ -7,6 +7,11 @@ import sh.miles.menukit.util.PagedInventory;
 
 import java.util.function.Function;
 
+/**
+ * A Factory used for producing a certain view with a specific page count.
+ *
+ * @param <V> the type of view
+ */
 public class SlotMenuFactory<V extends InventoryView> {
 
     private final Function<Player, V> viewFactory;
@@ -14,6 +19,12 @@ public class SlotMenuFactory<V extends InventoryView> {
 
     private MenuConstructor<V> constructor;
 
+    /**
+     * Initializes a new view factory.
+     *
+     * @param viewFactory the inventory view creation function
+     * @param pageCount   total number of pages for each menu produced by this factory
+     */
     public SlotMenuFactory(final Function<Player, V> viewFactory, final int pageCount) {
         Preconditions.checkArgument(viewFactory != null, "The provided viewFactory should not be null");
         this.viewFactory = viewFactory;
@@ -53,7 +64,7 @@ public class SlotMenuFactory<V extends InventoryView> {
     }
 
     /**
-     * Sets this factories menu constructor
+     * Sets this factories menu constructor.
      *
      * <p>Note you can only set the menu constructor of a given factory once. Trying to set it again
      * will throw an IllegalArgumentException
@@ -83,7 +94,7 @@ public class SlotMenuFactory<V extends InventoryView> {
     }
 
     /**
-     * Functional interface used to edit the preliminary factorized slot menu
+     * Functional interface used to edit the preliminary factorized slot menu.
      *
      * @param <V> the type of view
      * @since 1.0.0-SNAPSHOT
@@ -95,7 +106,7 @@ public class SlotMenuFactory<V extends InventoryView> {
 
     /**
      * Functional interface used to create any type of menu to be set with the
-     * {@link #setMenuConstructor(MenuConstructor)}
+     * {@link #setMenuConstructor(MenuConstructor)} function.
      *
      * @param <V> the type of view
      * @since 1.0.0-SNAPSHOT

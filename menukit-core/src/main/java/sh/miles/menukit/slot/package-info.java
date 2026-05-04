@@ -1,7 +1,7 @@
 /**
  * Package containing slot implements for {@link sh.miles.menukit.menu.SlotMenu}
  *
- * @since 0
+ * @since 1.0.0-SNAPSHOT
  */
 @NullMarked
 package sh.miles.menukit.slot;
