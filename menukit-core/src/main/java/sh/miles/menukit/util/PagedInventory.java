@@ -60,8 +60,8 @@ public final class PagedInventory {
     /**
      * Gets the slot on the provided page at the given index.
      *
-     * @param slot the slot
      * @param page the page
+     * @param slot the slot
      * @return the slot at that position
      * @since 1.0.0-SNAPSHOT
      */
@@ -90,7 +90,7 @@ public final class PagedInventory {
     public void setCurrentPage(int page) {
         this.pagedArray.setCurrentPage(page);
         for (int i = 0; i < inventory.getSize(); i++) {
-            inventory.setItem(i, this.pagedArray.get(i).getContent());
+            inventory.setItem(i, this.getSlot(i).getContent());
         }
     }
 
@@ -102,8 +102,8 @@ public final class PagedInventory {
      * @since 1.0.0-SNAPSHOT
      */
     public void setCurrentPageFor(int page, int slot) {
-        this.pagedArray.setCurrentPageFor(slot, page);
-        inventory.setItem(slot, this.pagedArray.get(slot).getContent());
+        this.pagedArray.setCurrentPageFor(page, slot);
+        inventory.setItem(slot, this.getSlot(slot).getContent());
     }
 
     /**

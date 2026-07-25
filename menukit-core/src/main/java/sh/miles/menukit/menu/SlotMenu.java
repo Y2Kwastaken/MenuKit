@@ -72,6 +72,10 @@ public abstract class SlotMenu<V extends InventoryView> {
     /**
      * Handles the drag event for this menu.
      *
+     * <p>Only slots belonging to the top inventory are dispatched. Raw slots are used rather than
+     * {@link InventoryDragEvent#getInventorySlots()} because the latter converts slots from both inventories into the
+     * same range, making a drag in the players own inventory indistinguishable from one in the menu.
+     *
      * <p>If this method is overridden and the super method is not called behavior may not occur as
      * normally expected. It is recommended to always call the super logic or reimplement it accordingly
      *
@@ -79,9 +83,10 @@ public abstract class SlotMenu<V extends InventoryView> {
      * @since 1.0.0-SNAPSHOT
      */
     public void handleDrag(final InventoryDragEvent event) {
-        if (event.getInventory().equals(this.bukkitView.getTopInventory())) {
-            for (final Integer slot : event.getInventorySlots()) {
-                inventory.getSlot(slot).drag(new MenuEventCallback<>(event, this));
+        final int topSize = this.bukkitView.getTopInventory().getSize();
+        for (final int rawSlot : event.getRawSlots()) {
+            if (rawSlot < topSize) {
+                this.inventory.getSlot(rawSlot).drag(new MenuEventCallback<>(event, this));
             }
         }
     }

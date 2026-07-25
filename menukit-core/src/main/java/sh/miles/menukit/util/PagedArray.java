@@ -57,16 +57,16 @@ public final class PagedArray<T> {
     /**
      * Gets the content from the index provided on the provided page.
      *
-     * @param index the index to get the object from
      * @param page  the page to get the object from
+     * @param index the index to get the object from
      * @return the previous object at that index if any
      * @throws IllegalStateException thrown if the input is out of bounds
      * @since 1.0.0-SNAPSHOT
      */
     @Nullable
-    public T get(int index, int page) throws IllegalStateException {
-        assertBoundsPageStats(index);
+    public T get(int page, int index) throws IllegalStateException {
         assertBoundsPages(page);
+        assertBoundsPageStats(index);
 
         return (T) this.array[page][index];
     }
@@ -101,7 +101,7 @@ public final class PagedArray<T> {
      */
     @Nullable
     public T set(int page, int index, @Nullable T value) throws IllegalStateException {
-        final T previous = get(index, page);
+        final T previous = get(page, index);
         this.array[page][index] = value;
         return previous;
     }
@@ -109,12 +109,12 @@ public final class PagedArray<T> {
     /**
      * Sets the current page for the provided index.
      *
-     * @param index the index to set
      * @param page  the page to flip to
+     * @param index the index to set
      * @throws IllegalStateException if the input is out of bounds
      * @since 1.0.0-SNAPSHOT
      */
-    public void setCurrentPageFor(int index, int page) throws IllegalStateException {
+    public void setCurrentPageFor(int page, int index) throws IllegalStateException {
         assertBoundsPages(page);
         assertBoundsPageStats(index);
         pageStats[index] = page;
@@ -168,7 +168,7 @@ public final class PagedArray<T> {
     }
 
     private void assertBoundsPageStats(int index) {
-        if (index < 0 || index > pageStats.length) {
+        if (index < 0 || index >= pageStats.length) {
             throw new IllegalStateException("Out of bounds for getting current page for an index given value %d is not within 0 and %d".formatted(index, pageStats.length));
         }
     }

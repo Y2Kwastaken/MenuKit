@@ -36,7 +36,7 @@ public final class MenuRecipe {
 
         for (int page = 0; page < this.pattern.getPages(); page++) {
             for (int index = 0; index < this.pattern.getPageSize(); index++) {
-                final var key = this.pattern.get(index, page);
+                final var key = this.pattern.get(page, index);
                 if (key == null) continue;
                 final MenuStack stack = this.mapping.get((char) key);
                 if (stack == null) {
@@ -69,7 +69,7 @@ public final class MenuRecipe {
     public char[] getPagePattern(int page) {
         char[] singlePage = new char[this.pattern.getPageSize()];
         for (int i = 0; i < this.pattern.getPageSize(); i++) {
-            singlePage[i] = this.pattern.get(i, page);
+            singlePage[i] = this.pattern.get(page, i);
         }
 
         return singlePage;

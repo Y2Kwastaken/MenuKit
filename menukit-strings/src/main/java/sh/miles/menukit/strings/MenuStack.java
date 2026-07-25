@@ -27,6 +27,16 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
                         Consumer<MenuEventCallback<InventoryDragEvent>> drag) {
 
     /**
+     * Creates a MenuStack
+     *
+     * @since 2.0.0-SNAPSHOT
+     */
+    public MenuStack {
+        Preconditions.checkArgument(item != null, "The provided item must not be null");
+        item = item.clone();
+    }
+
+    /**
      * Gets a cloned ItemStack of this MenuStack.
      *
      * @return a bukkit ItemStack
@@ -55,7 +65,7 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
      * @since 1.0.0-SNAPSHOT
      */
     public MenuSlot.Builder copyTo(MenuSlot.Builder builder) {
-        return builder.content(this.item).drag(this.drag).click(this.click);
+        return builder.content(this.item.clone()).drag(this.drag).click(this.click);
     }
 
     /**
@@ -84,6 +94,7 @@ public record MenuStack(ItemStack item, Consumer<MenuEventCallback<InventoryClic
     public static MenuStack of(ItemStack item, boolean cancel, boolean tooltip) {
         Preconditions.checkArgument(item != null, "The provided item must not be null");
         if (tooltip) {
+            item = item.clone(); // the tooltip component is applied to our copy, never the callers stack
             item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hideTooltip(true).build());
         }
         return new MenuStack(item, cancel ? CLICK_CANCEL : CLICK_NOTHING, cancel ? DRAG_CANCEL : DRAG_NOTHING);

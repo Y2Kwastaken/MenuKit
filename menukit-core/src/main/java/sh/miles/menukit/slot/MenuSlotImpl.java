@@ -55,7 +55,7 @@ public class MenuSlotImpl implements MenuSlot {
     public void setContent(final ItemStack item) {
         Preconditions.checkArgument(
                 item != null, "The provided item must not be null use ItemStack#empty() for an empty item");
-        this.content = item;
+        this.content = item.clone();
         inventory.setItem(this);
     }
 
