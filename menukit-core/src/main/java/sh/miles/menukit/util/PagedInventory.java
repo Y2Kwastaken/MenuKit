@@ -46,6 +46,17 @@ public final class PagedInventory {
     }
 
     /**
+     * Removes an item from a given page and slot
+     *
+     * @param page the page to remove from
+     * @param slot the slot to remove from
+     * @since 2.1.0-SNAPSHOT
+     */
+    public void removeItem(int page, int slot) {
+        pagedArray.set(page, slot, null);
+    }
+
+    /**
      * Gets the slot at the given index.
      *
      * @param slot the slot
@@ -95,6 +106,21 @@ public final class PagedInventory {
     }
 
     /**
+     * Swaps to a page, taking any slot that page leaves empty from the fallback page instead.
+     *
+     * <p>A slot holding no item counts as empty.
+     *
+     * @param page         the page to swap to
+     * @param fallbackPage the page to take empty slots from
+     * @since 2.1.0-SNAPSHOT
+     */
+    public void setPageWithFallback(int page, int fallbackPage) {
+        for (int slot = 0; slot < inventory.getSize(); slot++) {
+            this.setCurrentPageFor(this.getSlot(page, slot).hasContent() ? page : fallbackPage, slot);
+        }
+    }
+
+    /**
      * Sets the current page for a specific slot.
      *
      * @param slot the slot
@@ -113,9 +139,23 @@ public final class PagedInventory {
      * @param slots the slots to set
      * @since 1.0.0-SNAPSHOT
      */
-    public void setCurrentPageFor(int page, int[] slots) {
+    public void setCurrentPageFor(int page, int... slots) {
         for (final int slot : slots) {
             this.setCurrentPageFor(page, slot);
+        }
+    }
+
+    /**
+     * Swaps the given slots to a page, taking any that page leaves empty from the fallback page instead.
+     *
+     * @param page         the page to swap the given slots to
+     * @param fallbackPage the page to take empty slots from
+     * @param slots        the slots to swap
+     * @since 2.1.0-SNAPSHOT
+     */
+    public void setPageWithFallbackFor(int page, int fallbackPage, int... slots) {
+        for (final int slot : slots) {
+            this.setCurrentPageFor(this.getSlot(page, slot).hasContent() ? page : fallbackPage, slot);
         }
     }
 
