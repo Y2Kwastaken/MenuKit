@@ -19,7 +19,7 @@ MenuKit is available via the Miles Repository.
 <dependency>
     <groupId>sh.miles.menukit</groupId>
     <artifactId>menukit-core</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>2.1.0-SNAPSHOT</version>
 </dependency>
 <dependency>
     <groupId>sh.miles.menukit</groupId>
@@ -38,7 +38,7 @@ repositories {
 }
 
 dependencies {
-    implementation "sh.miles.menukit:menukit-core:2.0.0-SNAPSHOT"
+    implementation "sh.miles.menukit:menukit-core:2.1.0-SNAPSHOT"
     implementation "sh.miles.menukit:menukit-strings:2.0.0-SNAPSHOT"
 }
 ```
