@@ -32,7 +32,7 @@ public final class MenuRecipe {
      */
     public void apply(PagedInventory inventory) {
         Preconditions.checkArgument(inventory != null, "The provided inventory must not be null");
-        Preconditions.checkArgument(this.pattern.getPageSize() <= inventory.getPageSize() || this.pattern.getPages() <= inventory.getPages(), "The pattern can not be applied to this inventory because the pattern is too large");
+        Preconditions.checkArgument(this.pattern.getPageSize() <= inventory.getPageSize() && this.pattern.getPages() <= inventory.getPages(), "The pattern can not be applied to this inventory because the pattern is too large");
 
         for (int page = 0; page < this.pattern.getPages(); page++) {
             for (int index = 0; index < this.pattern.getPageSize(); index++) {
@@ -143,12 +143,18 @@ public final class MenuRecipe {
         }
 
         /**
-         * Parses a "page layout" into page, "page" in the given PagedArray. This is done by trimming the string and
-         * replacing all "\n" with empty characters. This effectively trims the layout down to a single char array.
+         * Flattens a page layout string into the given page of the pattern array.
          *
-         * @param page    the page to input the layout into
+         * <p>The layout is trimmed and stripped of newlines before anything else, so a page may be written as a multi
+         * line text block shaped like the menu it describes rather than as one long string. Each character left after
+         * that maps to a single slot, in order, and is resolved against the key mapping later by
+         * {@link MenuRecipe#apply(PagedInventory)}.
+         *
+         * @param page    the page to write the layout into
          * @param layout  the layout string
-         * @param pattern the pattern page array.
+         * @param pattern the pattern array to write into
+         * @throws IllegalStateException thrown if the flattened layout is not exactly the page size established by the
+         *                               first call to {@link #page(int, String)}
          */
         private void parseLayout(int page, String layout, PagedArray<Character> pattern) {
             layout = layout.trim().replaceAll("\n", "");

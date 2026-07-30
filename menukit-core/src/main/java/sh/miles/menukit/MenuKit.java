@@ -39,7 +39,9 @@ public final class MenuKit {
      */
     public void stop() throws IllegalArgumentException {
         Preconditions.checkArgument(this.plugin != null, "Can not teardown MenuKit before MenuKit#setup is called");
-        HandlerList.unregisterAll(listener);
-        plugin = null;
+        HandlerList.unregisterAll(this.listener);
+        SlotMenuManager.shutdown();
+        this.listener = null;
+        this.plugin = null;
     }
 }

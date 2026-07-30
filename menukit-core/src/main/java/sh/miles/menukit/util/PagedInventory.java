@@ -2,6 +2,7 @@ package sh.miles.menukit.util;
 
 import com.google.common.base.Preconditions;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import sh.miles.menukit.slot.MenuSlot;
 
 /**
@@ -40,9 +41,7 @@ public final class PagedInventory {
         final int page = item.getPage();
         final int slot = item.getSlot();
         pagedArray.set(page, slot, item);
-        if (pagedArray.getCurrentPage(slot) == page) {
-            inventory.setItem(slot, item.getContent());
-        }
+        writeIfVisible(page, slot, item.getContent());
     }
 
     /**
@@ -54,6 +53,7 @@ public final class PagedInventory {
      */
     public void removeItem(int page, int slot) {
         pagedArray.set(page, slot, null);
+        writeIfVisible(page, slot, ItemStack.empty());
     }
 
     /**
@@ -166,11 +166,7 @@ public final class PagedInventory {
      * @since 1.0.0-SNAPSHOT
      */
     public void update(MenuSlot slot) {
-        if (this.getCurrentPage(slot.getSlot()) != slot.getPage()) {
-            return;
-        }
-
-        this.inventory.setItem(slot.getSlot(), slot.getContent());
+        writeIfVisible(slot.getPage(), slot.getSlot(), slot.getContent());
     }
 
     /**
@@ -191,5 +187,19 @@ public final class PagedInventory {
      */
     public int getPageSize() {
         return this.pagedArray.getPageSize();
+    }
+
+    /**
+     * Writes the given content into the backing inventory, but only if the given page is the one that slot is currently
+     * showing. Writes for any other page are kept in the paged array alone until that page is swapped to.
+     *
+     * @param page    the page the content belongs to
+     * @param slot    the slot to write
+     * @param content the content to write
+     */
+    private void writeIfVisible(int page, int slot, ItemStack content) {
+        if (this.pagedArray.getCurrentPage(slot) == page) {
+            this.inventory.setItem(slot, content);
+        }
     }
 }
